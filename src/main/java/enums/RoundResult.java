@@ -1,0 +1,18 @@
+package enums;
+
+public enum  RoundResult {
+    //TIE:
+    ROCKROCK,
+    SCISSORSSCISSOR,
+    PAPERPAPER,
+
+    //PLAYER WINS"
+    ROCKSCISSORS,
+    PAPERROCK,
+    SCISSORSPAPER,
+
+    //COMPUTER WINS
+    ROCKPAPER,
+    PAPERSCISSORS,
+    SCISSORSROCK,
+}
