@@ -64,7 +64,7 @@ public class RspLogic {
             case PAPERPAPER:
                 System.out.println("It's a draw");
                 break;
-            case SCISSORSSCISSOR:
+            case SCISSORSSCISSORS:
                 System.out.println("It's a draw");
                 break;
             case PAPERROCK:

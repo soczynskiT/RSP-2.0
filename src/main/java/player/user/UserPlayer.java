@@ -3,6 +3,7 @@ package player.user;
 import enums.Moves;
 import player.Player;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class UserPlayer implements Player {
@@ -63,5 +64,19 @@ public class UserPlayer implements Player {
 
     public int getRoundPoints() {
         return roundPoints;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserPlayer)) return false;
+        UserPlayer that = (UserPlayer) o;
+        return Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getName());
     }
 }

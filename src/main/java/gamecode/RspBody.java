@@ -7,7 +7,10 @@ import java.util.Scanner;
 
 public class RspBody {
     final private CompPlayer compPlayer = new CompPlayer();
-    final private Scanner scanner = new Scanner(System.in);
+    final private Scanner mainScan = new Scanner(System.in);
+    final private Scanner settingsScan = new Scanner(System.in);
+    final private Scanner compSetScan = new Scanner(System.in);
+    final private Scanner exitScan = new Scanner(System.in);
     final private UserProcessor processor;
     final private RspLogic rspLogic;
 
@@ -22,7 +25,7 @@ public class RspBody {
         System.out.println("[3] ~~ Current player stats.");
         System.out.println("[X] ~~ Exit.");
 
-        final String menuChoice = scanner.nextLine().toUpperCase();
+        final String menuChoice = mainScan.nextLine().toUpperCase();
         switch (menuChoice) {
             case "1":
                 rspLogic.playNewGame(compPlayer, processor);
@@ -50,21 +53,20 @@ public class RspBody {
         System.out.println("[3] ~~ Modify game difficulty.");
         System.out.println("[4] ~~ Back to main menu.");
 
-        final int settingsChoice = scanner.nextInt();
+        final String settingsChoice = settingsScan.nextLine();
         switch (settingsChoice) {
-            case 1:
+            case "1":
                 System.out.println("Please enter new player name.");
                 processor.createNewPlayer();
-                System.out.println("New player created - " + processor.getCurrentPlayer().getName());
                 settingsMenu();
                 break;
-            case 2:
+            case "2":
                 System.out.println("In progress - switch between players in database");
                 break;
-            case 3:
+            case "3":
                 System.out.println("In progress - modifies comp chances");
                 break;
-            case 4:
+            case "4":
                 mainMenu();
                 break;
             default:
@@ -74,7 +76,7 @@ public class RspBody {
     }
 
     private void gameExit() {
-        final String exitConfirmation = scanner.nextLine().toUpperCase();
+        final String exitConfirmation = exitScan.nextLine().toUpperCase();
         switch (exitConfirmation) {
             case "Y":
                 break;
@@ -95,17 +97,17 @@ public class RspBody {
         System.out.println("4 - Check current settings in %");
         System.out.println("5 - Back to settings menu");
 
-        final int compSetMenuChoice = scanner.nextInt();
+        final String compSetMenuChoice = compSetScan.nextLine();
         switch (compSetMenuChoice) {
-            case 1:
+            case "1":
                 break;
-            case 2:
+            case "2":
                 break;
-            case 3:
+            case "3":
                 break;
-            case 4:
+            case "4":
                 break;
-            case 5:
+            case "5":
                 settingsMenu();
                 break;
             default:

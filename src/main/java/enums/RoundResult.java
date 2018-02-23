@@ -3,7 +3,7 @@ package enums;
 public enum  RoundResult {
     //TIE:
     ROCKROCK,
-    SCISSORSSCISSOR,
+    SCISSORSSCISSORS,
     PAPERPAPER,
 
     //PLAYER WINS"

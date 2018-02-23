@@ -28,6 +28,8 @@ public class RspGameMain {
         processor.addPlayerToDatabase(newPlayer);
 
         final RspBody rspBody = new RspBody(processor, rspLogic);
+
+
         rspBody.mainMenu();
     }
 }

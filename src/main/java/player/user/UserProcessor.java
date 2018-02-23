@@ -19,13 +19,13 @@ public class UserProcessor {
         final String name = scanner.nextLine();
         final UserPlayer tempPlayer = new UserPlayer(name);
 
-        if (!name.equals("") && !name.equals(" ") && !playersSet.contains(tempPlayer.getName())) {
+        if (!name.equals("") && !name.equals(" ") && !playersSet.contains(tempPlayer)) {
             UserPlayer newPlayer = new UserPlayer(name);
             setCurrentPlayer(newPlayer);
             playersSet.add(newPlayer);
+            System.out.println("New player created - " + currentPlayer.getName());
         } else {
-            System.out.println("Wrong name, or player already exist, try again.");
-            createNewPlayer();
+            System.out.println("Wrong name, or player already exist.");
         }
     }
 
