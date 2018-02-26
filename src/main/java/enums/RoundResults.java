@@ -1,17 +1,17 @@
 package enums;
 
-public enum  RoundResult {
+public enum RoundResults {
     //TIE:
     ROCKROCK,
     SCISSORSSCISSORS,
     PAPERPAPER,
 
-    //PLAYER WINS"
+    //PLAYER WINS:
     ROCKSCISSORS,
     PAPERROCK,
     SCISSORSPAPER,
 
-    //COMPUTER WINS
+    //COMPUTER WINS:
     ROCKPAPER,
     PAPERSCISSORS,
     SCISSORSROCK,

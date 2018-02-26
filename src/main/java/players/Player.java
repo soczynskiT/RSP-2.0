@@ -1,8 +1,8 @@
-package player;
+package players;
 
 public interface Player {
 
-    String move();
+    String makeMove();
 
     void addRoundPoint();
 

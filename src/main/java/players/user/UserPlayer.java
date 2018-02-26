@@ -1,19 +1,17 @@
-package player.user;
+package players.user;
 
 import enums.Moves;
-import player.Player;
+import players.Player;
 
 import java.util.Objects;
 import java.util.Scanner;
 
 public class UserPlayer implements Player {
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner userScanner = new Scanner(System.in);
 
     private String name;
-    /* needed for stats in future
     private int wonGames;
     private int lostGames;
-    */
     private int roundPoints;
 
     public UserPlayer(String name) {
@@ -21,35 +19,35 @@ public class UserPlayer implements Player {
     }
 
     @Override
-    public String move() {
+    public String makeMove() {
         System.out.println("[R] ~~ " + Moves.R.getName());
         System.out.println("[P] ~~ " + Moves.P.getName());
         System.out.println("[S] ~~ " + Moves.S.getName());
 
-        boolean wrong = true;
+        boolean isChoiceWrong = true;
         String result = "";
         do {
-            String moveCmd = scanner.nextLine().toUpperCase();
+            final String moveChoice = userScanner.nextLine().toUpperCase();
             try {
-                switch (Moves.valueOf(moveCmd)) {
+                switch (Moves.valueOf(moveChoice)) {
                     case R:
                         result = Moves.R.getName();
-                        wrong = false;
+                        isChoiceWrong = false;
                         break;
                     case P:
                         result = Moves.P.getName();
-                        wrong = false;
+                        isChoiceWrong = false;
                         break;
                     case S:
                         result = Moves.S.getName();
-                        wrong = false;
+                        isChoiceWrong = false;
                         break;
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println("raz jeszcze");
+                System.out.println("! Wrong choice, please try again !");
             }
         }
-        while (wrong);
+        while (isChoiceWrong);
         return result;
     }
 
@@ -62,8 +60,32 @@ public class UserPlayer implements Player {
         return name;
     }
 
+    public int getWonGames() {
+        return wonGames;
+    }
+
+    public int getLostGames() {
+        return lostGames;
+    }
+
     public int getRoundPoints() {
         return roundPoints;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWonGames(int wonGames) {
+        this.wonGames = wonGames;
+    }
+
+    public void setLostGames(int lostGames) {
+        this.lostGames = lostGames;
+    }
+
+    public void setRoundPoints(int roundPoints) {
+        this.roundPoints = roundPoints;
     }
 
     @Override
@@ -78,5 +100,10 @@ public class UserPlayer implements Player {
     public int hashCode() {
 
         return Objects.hash(getName());
+    }
+
+    @Override
+    public String toString() {
+        return "~~ " + name + " Won games > " + wonGames + " : " + lostGames + " < Lost games";
     }
 }

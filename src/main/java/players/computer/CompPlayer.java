@@ -1,6 +1,6 @@
-package player.computer;
+package players.computer;
 
-import player.Player;
+import players.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.Random;
 
 public class CompPlayer implements Player {
-    final private Random random = new Random();
+    final private Random randomChoice = new Random();
     final private List<String> choiceList = new ArrayList<>(Arrays.asList("Rock", "Paper", "Scissors"));
+
+    final String name = "Computer";
     private int roundPoints;
 
+
     @Override
-    public String move() {
-        final int compChoice = random.nextInt(3);
+    public String makeMove() {
+        final int compChoice = randomChoice.nextInt(3);
         return choiceList.get(compChoice);
     }
 
@@ -23,11 +26,18 @@ public class CompPlayer implements Player {
         roundPoints++;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public int getRoundPoints() {
         return roundPoints;
     }
 
-    public String getName() {
-        return "Computer";
+    public void setRoundPoints(int roundPoints) {
+        this.roundPoints = roundPoints;
     }
 }
+
+
+
