@@ -6,15 +6,17 @@ import players.user.UserController;
 import java.util.Scanner;
 
 public class GameStructureController {
-    final private CompPlayer compPlayer = new CompPlayer();
+
     final private Scanner mainMenuScan = new Scanner(System.in);
     final private Scanner settingsMenuScan = new Scanner(System.in);
     final private Scanner compSetMenuScan = new Scanner(System.in);
     final private Scanner exitMenuScan = new Scanner(System.in);
+    final private CompPlayer compPlayer;
     final private UserController userController;
     final private GameLogicController logicController;
 
-    public GameStructureController(UserController userController, GameLogicController logicController) {
+    public GameStructureController(CompPlayer compPlayer, UserController userController, GameLogicController logicController) {
+        this.compPlayer = compPlayer;
         this.userController = userController;
         this.logicController = logicController;
     }
@@ -92,31 +94,37 @@ public class GameStructureController {
     }
 
     private void compSettingsMenu() {
-        System.out.println("[1] ~~ Modify computer chances to lose.");
-        System.out.println("[2] ~~ Modify computer chances to win.");
+        System.out.println("[1] ~~ Modify computer chances to win.");
+        System.out.println("[2] ~~ Modify computer chances to lose.");
         System.out.println("[3] ~~ Modify computer chances to draw.");
-        System.out.println("[4] ~~ Check current settings in %.");
-        System.out.println("[5] ~~ Back to settings menu.");
+        System.out.println("[4] ~~ Restore default settings.");
+        System.out.println("[5] ~~ Check current settings in %.");
+        System.out.println("[6] ~~ Back to settings menu.");
 
         final String compSetMenuChoice = compSetMenuScan.nextLine();
         switch (compSetMenuChoice) {
             case "1":
-                System.out.println("Under construction");
+                compPlayer.setWinChancesModifier();
                 compSettingsMenu();
                 break;
             case "2":
-                System.out.println("Under construction");
+                compPlayer.setLoseChancesModifier();
                 compSettingsMenu();
                 break;
             case "3":
-                System.out.println("Under construction");
+                compPlayer.setDrawChancesModifier();
                 compSettingsMenu();
                 break;
             case "4":
-                System.out.println("Under construction");
+                compPlayer.setDefaultChancesModifiersValues();
+                System.out.println("Default settings restored.\n");
                 compSettingsMenu();
                 break;
             case "5":
+                compPlayer.displayCurrentChanceSettings();
+                compSettingsMenu();
+                break;
+            case "6":
                 settingsMenu();
                 break;
             default:

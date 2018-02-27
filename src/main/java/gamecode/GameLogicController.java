@@ -49,8 +49,10 @@ public class GameLogicController {
 
     private void playSingleRound(CompPlayer compPlayer, UserController userController) {
 
-        final String playerMove = userController.getCurrentPlayer().makeMove().toUpperCase();
-        final String compMove = compPlayer.makeMove().toUpperCase();
+        final String playerMove = userController.getCurrentPlayer().makeMove();
+
+        compPlayer.setComputerChances(playerMove);
+        final String compMove = compPlayer.makeMove();
 
         System.out.println(userController.getCurrentPlayer().getName() + " " + playerMove + " : " + compMove + " " + compPlayer.getName());
 
@@ -58,7 +60,7 @@ public class GameLogicController {
     }
 
     private void addOneRoundPointToRoundWinner(UserPlayer player, String playerMove, CompPlayer compPlayer, String compMove) {
-        switch (RoundResults.valueOf(playerMove + compMove)) {
+        switch (RoundResults.valueOf(playerMove.toUpperCase() + compMove.toUpperCase())) {
             case ROCKROCK:
                 System.out.println("It's a draw");
                 break;
