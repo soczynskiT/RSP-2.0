@@ -14,6 +14,7 @@ public class RspGameMain {
         compPlayer.setDefaultChancesModifiersValues();
 
         final GameLogicController logicController = new GameLogicController();
+        logicController.createResultLabel();
         final GameStructureController structureController = new GameStructureController(compPlayer, userController, logicController);
 
         structureController.mainMenu();

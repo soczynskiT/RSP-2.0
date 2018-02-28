@@ -2,17 +2,9 @@ package enums;
 
 public enum RoundResults {
     //TIE:
-    ROCKROCK,
-    SCISSORSSCISSORS,
-    PAPERPAPER,
+    TIE,
+    WIN,
+    LOSE;
 
-    //PLAYER WINS:
-    ROCKSCISSORS,
-    PAPERROCK,
-    SCISSORSPAPER,
 
-    //COMPUTER WINS:
-    ROCKPAPER,
-    PAPERSCISSORS,
-    SCISSORSROCK,
 }

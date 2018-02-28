@@ -1,5 +1,6 @@
 package gamecode;
 
+import enums.Moves;
 import enums.RoundResults;
 import players.computer.CompPlayer;
 import players.user.UserPlayer;
@@ -10,6 +11,19 @@ import java.util.InputMismatchException;
 
 public class GameLogicController {
     final private Scanner gameLogicScanner = new Scanner(System.in);
+    final private RoundResults[][] resultLabel = new RoundResults[3][3];
+
+    public void createResultLabel() {
+        resultLabel[0][0] = RoundResults.TIE;
+        resultLabel[0][1] = RoundResults.WIN;
+        resultLabel[0][2] = RoundResults.LOSE;
+        resultLabel[1][0] = RoundResults.LOSE;
+        resultLabel[1][1] = RoundResults.TIE;
+        resultLabel[1][2] = RoundResults.WIN;
+        resultLabel[2][0] = RoundResults.WIN;
+        resultLabel[2][1] = RoundResults.LOSE;
+        resultLabel[2][2] = RoundResults.TIE;
+    }
 
     public void playNewGame(CompPlayer compPlayer, UserController userController) {
         System.out.println("Pleas enter rounds - to win number: (min 1 - max 10):");
@@ -49,49 +63,25 @@ public class GameLogicController {
 
     private void playSingleRound(CompPlayer compPlayer, UserController userController) {
 
-        final String playerMove = userController.getCurrentPlayer().makeMove();
+        final Moves playerMove = userController.getCurrentPlayer().makeMove();
 
         compPlayer.setComputerChances(playerMove);
-        final String compMove = compPlayer.makeMove();
+        final Moves compMove = compPlayer.makeMove();
 
-        System.out.println(userController.getCurrentPlayer().getName() + " " + playerMove + " : " + compMove + " " + compPlayer.getName());
+        System.out.println(userController.getCurrentPlayer().getName() + " " + playerMove.getName() + " : " + compMove.getName() + " " + compPlayer.getName());
 
         addOneRoundPointToRoundWinner(userController.getCurrentPlayer(), playerMove, compPlayer, compMove);
     }
 
-    private void addOneRoundPointToRoundWinner(UserPlayer player, String playerMove, CompPlayer compPlayer, String compMove) {
-        switch (RoundResults.valueOf(playerMove.toUpperCase() + compMove.toUpperCase())) {
-            case ROCKROCK:
-                System.out.println("It's a draw");
+    private void addOneRoundPointToRoundWinner(UserPlayer player, Moves playerMove, CompPlayer compPlayer, Moves compMove) {
+        RoundResults value = resultLabel[playerMove.getResultLabelPosition()][compMove.getResultLabelPosition()];
+        switch (value) {
+            case TIE:
                 break;
-            case PAPERPAPER:
-                System.out.println("It's a draw");
-                break;
-            case SCISSORSSCISSORS:
-                System.out.println("It's a draw");
-                break;
-            case PAPERROCK:
-                System.out.println(player.getName() + " WINS !!!");
+            case WIN:
                 player.addRoundPoint();
                 break;
-            case ROCKSCISSORS:
-                System.out.println(player.getName() + " WINS !!!");
-                player.addRoundPoint();
-                break;
-            case SCISSORSPAPER:
-                System.out.println(player.getName() + " WINS !!!");
-                player.addRoundPoint();
-                break;
-            case ROCKPAPER:
-                System.out.println(compPlayer.getName() + " WINS !!!");
-                compPlayer.addRoundPoint();
-                break;
-            case PAPERSCISSORS:
-                System.out.println(compPlayer.getName() + " WINS !!!");
-                compPlayer.addRoundPoint();
-                break;
-            case SCISSORSROCK:
-                System.out.println(compPlayer.getName() + " WINS !!!");
+            case LOSE:
                 compPlayer.addRoundPoint();
                 break;
         }

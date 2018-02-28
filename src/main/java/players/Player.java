@@ -1,8 +1,10 @@
 package players;
 
+import enums.Moves;
+
 public interface Player {
 
-    String makeMove();
+    Moves makeMove();
 
     void addRoundPoint();
 

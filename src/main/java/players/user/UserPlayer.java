@@ -19,27 +19,27 @@ public class UserPlayer implements Player {
     }
 
     @Override
-    public String makeMove() {
+    public Moves makeMove() {
         System.out.println("[R] ~~ " + Moves.R.getName());
         System.out.println("[P] ~~ " + Moves.P.getName());
         System.out.println("[S] ~~ " + Moves.S.getName());
 
         boolean isChoiceWrong = true;
-        String result = "";
+        Moves result = null;
         do {
             final String moveChoice = userScanner.nextLine().toUpperCase();
             try {
                 switch (Moves.valueOf(moveChoice)) {
                     case R:
-                        result = Moves.R.getName();
+                        result = Moves.R;
                         isChoiceWrong = false;
                         break;
                     case P:
-                        result = Moves.P.getName();
+                        result = Moves.P;
                         isChoiceWrong = false;
                         break;
                     case S:
-                        result = Moves.S.getName();
+                        result = Moves.S;
                         isChoiceWrong = false;
                         break;
                 }
@@ -76,12 +76,12 @@ public class UserPlayer implements Player {
         this.name = name;
     }
 
-    public void setWonGames(int wonGames) {
-        this.wonGames = wonGames;
+    public void setWonGames() {
+        this.wonGames ++;
     }
 
-    public void setLostGames(int lostGames) {
-        this.lostGames = lostGames;
+    public void setLostGames() {
+        this.lostGames ++;
     }
 
     public void setRoundPoints(int roundPoints) {

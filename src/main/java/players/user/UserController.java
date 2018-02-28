@@ -101,11 +101,11 @@ public class UserController {
     }
 
     public void addOneWinPointToStats() {
-        currentPlayer.setWonGames(currentPlayer.getWonGames() + 1);
+        currentPlayer.setWonGames();
     }
 
     public void addOneLostPointToStats() {
-        currentPlayer.setLostGames(currentPlayer.getLostGames() + 1);
+        currentPlayer.setLostGames();
     }
 }
 

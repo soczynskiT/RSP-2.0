@@ -1,5 +1,6 @@
 package players.computer;
 
+import enums.Moves;
 import players.Player;
 
 import java.util.*;
@@ -7,54 +8,55 @@ import java.util.*;
 public class CompPlayer implements Player {
     final private Random randomChoice = new Random();
     final private Scanner chanceModifierScanner = new Scanner(System.in);
-    final private List<String> choiceList = new ArrayList<>();
+    final private List<Moves> choiceList = new ArrayList<>();
 
     private int roundPoints;
     private int winChancesModifier;
     private int loseChancesModifier;
     private int drawChancesModifier;
 
-    public void setComputerChances(String playerMove) {
+    public void setComputerChances(Moves playerMove) {
         choiceList.clear();
+
         switch (playerMove) {
-            case "Rock":
+            case R:
                 for (int i = 0; i < winChancesModifier; i++) {
-                    choiceList.add("Paper");
+                    choiceList.add(Moves.P);
                 }
                 for (int i = 0; i < loseChancesModifier; i++) {
-                    choiceList.add("Scissors");
+                    choiceList.add(Moves.S);
                 }
                 for (int i = 0; i < drawChancesModifier; i++) {
-                    choiceList.add("Rock");
+                    choiceList.add(Moves.R);
                 }
                 break;
-            case "Scissors":
+            case S:
                 for (int i = 0; i < winChancesModifier; i++) {
-                    choiceList.add("Rock");
+                    choiceList.add(Moves.R);
                 }
                 for (int i = 0; i < loseChancesModifier; i++) {
-                    choiceList.add("Paper");
+                    choiceList.add(Moves.P);
                 }
                 for (int i = 0; i < drawChancesModifier; i++) {
-                    choiceList.add("Scissors");
+                    choiceList.add(Moves.S);
                 }
                 break;
-            case "Paper":
+            case P:
                 for (int i = 0; i < winChancesModifier; i++) {
-                    choiceList.add("Scissors");
+                    choiceList.add(Moves.S);
                 }
                 for (int i = 0; i < loseChancesModifier; i++) {
-                    choiceList.add("Rock");
+                    choiceList.add(Moves.R);
                 }
                 for (int i = 0; i < drawChancesModifier; i++) {
-                    choiceList.add("Paper");
+                    choiceList.add(Moves.P);
                 }
                 break;
         }
     }
 
     @Override
-    public String makeMove() {
+    public Moves makeMove() {
         final int compChoice = randomChoice.nextInt(choiceList.size());
         return choiceList.get(compChoice);
     }
@@ -75,6 +77,7 @@ public class CompPlayer implements Player {
     public void setRoundPoints(int roundPoints) {
         this.roundPoints = roundPoints;
     }
+
     public void setDefaultChancesModifiersValues() {
         this.winChancesModifier = 100;
         this.loseChancesModifier = 100;
@@ -103,7 +106,7 @@ public class CompPlayer implements Player {
 
     public void setLoseChancesModifier() {
         boolean isEntryCorrect = true;
-        while(isEntryCorrect) {
+        while (isEntryCorrect) {
             try {
                 System.out.println("Enter new value (1 - 100)");
                 final int newLoseChancesValue = chanceModifierScanner.nextInt();
