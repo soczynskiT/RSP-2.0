@@ -76,11 +76,11 @@ public class UserPlayer implements Player {
         this.name = name;
     }
 
-    public void setWonGames() {
+    public void incWonGames() {
         this.wonGames ++;
     }
 
-    public void setLostGames() {
+    public void incLostGames() {
         this.lostGames ++;
     }
 

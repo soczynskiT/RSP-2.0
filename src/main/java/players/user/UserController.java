@@ -22,7 +22,7 @@ public class UserController {
         String name = "";
         while (isCorrect) {
             final String firstPlayerName = firstPlayerNameScan.nextLine();
-            if (!firstPlayerName.equals("") && !firstPlayerName.equals("1") && !firstPlayerName.equals(" ")) {
+            if (!firstPlayerName.trim().isEmpty() && !firstPlayerName.equals("1")) {
                 name = firstPlayerName;
                 isCorrect = false;
             } else {
@@ -36,7 +36,7 @@ public class UserController {
     public void createNewPlayer() {
         final String newPlayerName = newPlayerNameScan.nextLine();
         tempPlayer.setName(newPlayerName);
-        if (!newPlayerName.equals("") && !newPlayerName.equals(" ") && !newPlayerName.equals("1") && !playersSet.contains(tempPlayer)) {
+        if (!newPlayerName.trim().isEmpty() && !newPlayerName.equals("1") && !playersSet.contains(tempPlayer)) {
             final UserPlayer newPlayer = new UserPlayer(newPlayerName);
             setCurrentPlayer(newPlayer);
             playersSet.add(newPlayer);
@@ -101,11 +101,11 @@ public class UserController {
     }
 
     public void addOneWinPointToStats() {
-        currentPlayer.setWonGames();
+        currentPlayer.incWonGames();
     }
 
     public void addOneLostPointToStats() {
-        currentPlayer.setLostGames();
+        currentPlayer.incLostGames();
     }
 }
 
