@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class UserPlayer implements Player {
-    private final Scanner userScanner = new Scanner(System.in);
 
     private String name;
     private int wonGames;
@@ -19,7 +18,7 @@ public class UserPlayer implements Player {
     }
 
     @Override
-    public Moves makeMove() {
+    public Moves makeMove(Scanner userScanner) {
         System.out.println("[R] ~~ " + Moves.R.getName());
         System.out.println("[P] ~~ " + Moves.P.getName());
         System.out.println("[S] ~~ " + Moves.S.getName());
@@ -56,6 +55,14 @@ public class UserPlayer implements Player {
         roundPoints++;
     }
 
+    public void incWonGames() {
+        this.wonGames++;
+    }
+
+    public void incLostGames() {
+        this.lostGames++;
+    }
+
     public String getName() {
         return name;
     }
@@ -74,14 +81,6 @@ public class UserPlayer implements Player {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void incWonGames() {
-        this.wonGames ++;
-    }
-
-    public void incLostGames() {
-        this.lostGames ++;
     }
 
     public void setRoundPoints(int roundPoints) {

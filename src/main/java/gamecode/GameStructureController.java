@@ -11,6 +11,10 @@ public class GameStructureController {
     final private Scanner settingsMenuScan = new Scanner(System.in);
     final private Scanner compSetMenuScan = new Scanner(System.in);
     final private Scanner exitMenuScan = new Scanner(System.in);
+    final private Scanner chanceModifierScanner = new Scanner(System.in);
+    final private Scanner newPLayerNameScan = new Scanner(System.in);
+    final private Scanner existingPlayerNameScan = new Scanner(System.in);
+    final private Scanner gameLogicScanner = new Scanner(System.in);
     final private CompPlayer compPlayer;
     final private UserController userController;
     final private GameLogicController logicController;
@@ -30,7 +34,7 @@ public class GameStructureController {
         final String mainMenuChoice = mainMenuScan.nextLine().toUpperCase();
         switch (mainMenuChoice) {
             case "1":
-                logicController.playNewGame(compPlayer, userController);
+                logicController.playNewGame(compPlayer, userController, gameLogicScanner);
                 mainMenu();
                 break;
             case "2":
@@ -60,11 +64,11 @@ public class GameStructureController {
         switch (settingsChoice) {
             case "1":
                 System.out.println("Please enter new player name.");
-                userController.createNewPlayer();
+                userController.createNewPlayer(newPLayerNameScan);
                 settingsMenu();
                 break;
             case "2":
-                userController.changeCurrentPlayer();
+                userController.changeCurrentPlayer(existingPlayerNameScan);
                 settingsMenu();
                 break;
             case "3":
@@ -104,15 +108,15 @@ public class GameStructureController {
         final String compSetMenuChoice = compSetMenuScan.nextLine();
         switch (compSetMenuChoice) {
             case "1":
-                compPlayer.setWinChancesModifier();
+                compPlayer.setWinChancesModifier(chanceModifierScanner);
                 compSettingsMenu();
                 break;
             case "2":
-                compPlayer.setLoseChancesModifier();
+                compPlayer.setLoseChancesModifier(chanceModifierScanner);
                 compSettingsMenu();
                 break;
             case "3":
-                compPlayer.setDrawChancesModifier();
+                compPlayer.setDrawChancesModifier(chanceModifierScanner);
                 compSettingsMenu();
                 break;
             case "4":

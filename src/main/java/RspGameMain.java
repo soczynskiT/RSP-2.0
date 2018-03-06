@@ -4,11 +4,13 @@ import players.computer.CompPlayer;
 import players.user.UserController;
 import players.user.UserPlayer;
 
+import java.util.Scanner;
+
 public class RspGameMain {
     public static void main(String args[]) {
 
         final UserController userController = new UserController(new UserPlayer("temp"));
-        userController.createFirstPlayer();
+        userController.createFirstPlayer(new Scanner(System.in));
 
         final CompPlayer compPlayer = new CompPlayer();
         compPlayer.setDefaultChancesModifiersValues();

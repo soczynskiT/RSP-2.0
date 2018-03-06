@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 public class GameLogicController {
-    final private Scanner gameLogicScanner = new Scanner(System.in);
+    final private Scanner userScanner = new Scanner(System.in);
     final private RoundResults[][] resultLabel = new RoundResults[3][3];
 
     public void createResultLabel() {
@@ -25,14 +25,14 @@ public class GameLogicController {
         resultLabel[2][2] = RoundResults.TIE;
     }
 
-    public void playNewGame(CompPlayer compPlayer, UserController userController) {
+    public void playNewGame(CompPlayer compPlayer, UserController userController, Scanner gameLogicScanner) {
         System.out.println("Pleas enter rounds - to win number: (min 1 - max 10):");
 
-        final int numberOfRoundsToWin = setNumberOfRoundsToWIn();
+        final int numberOfRoundsToWin = setNumberOfRoundsToWIn(gameLogicScanner);
 
         while (userController.getCurrentPlayer().getRoundPoints() < numberOfRoundsToWin && compPlayer.getRoundPoints() < numberOfRoundsToWin) {
-            playSingleRound(compPlayer, userController);
-            showCurrentGameScore(userController.getCurrentPlayer(), compPlayer);
+            playSingleRound(compPlayer, userController, userScanner);
+            System.out.println(showCurrentGameScore(userController.getCurrentPlayer(), compPlayer));
         }
         if (compPlayer.getRoundPoints() == numberOfRoundsToWin) {
             System.out.println("This time " + compPlayer.getName() + " wins.\n");
@@ -45,27 +45,27 @@ public class GameLogicController {
         clearCurrentGameRoundPoints(compPlayer, userController.getCurrentPlayer());
     }
 
-    private int setNumberOfRoundsToWIn() {
+    public int setNumberOfRoundsToWIn(Scanner gameLogicScanner) {
         try {
             final int roundsToWinNumber = gameLogicScanner.nextInt();
             if (roundsToWinNumber > 0 && roundsToWinNumber <= 10) {
                 return roundsToWinNumber;
             } else {
                 System.out.println("Incorrect digit, please try again.");
-                return setNumberOfRoundsToWIn();
+                return setNumberOfRoundsToWIn(gameLogicScanner);
             }
         } catch (InputMismatchException e) {
             System.out.println("Incorrect digit format, try again.");
             gameLogicScanner.nextLine();
-            return setNumberOfRoundsToWIn();
+            return setNumberOfRoundsToWIn(gameLogicScanner);
         }
     }
 
-    private void playSingleRound(CompPlayer compPlayer, UserController userController) {
+    private void playSingleRound(CompPlayer compPlayer, UserController userController, Scanner userScanner) {
 
-        final Moves playerMove = userController.getCurrentPlayer().makeMove();
+        final Moves playerMove = userController.getCurrentPlayer().makeMove(userScanner);
 
-        compPlayer.setComputerChances(playerMove);
+        compPlayer.setComputerChances(playerMove, compPlayer.getChoiceList());
         final Moves compMove = compPlayer.makeMove();
 
         System.out.println(userController.getCurrentPlayer().getName() + " " + playerMove.getName() + " : " + compMove.getName() + " " + compPlayer.getName());
@@ -73,7 +73,7 @@ public class GameLogicController {
         addOneRoundPointToRoundWinner(userController.getCurrentPlayer(), playerMove, compPlayer, compMove);
     }
 
-    private void addOneRoundPointToRoundWinner(UserPlayer player, Moves playerMove, CompPlayer compPlayer, Moves compMove) {
+    public void addOneRoundPointToRoundWinner(UserPlayer player, Moves playerMove, CompPlayer compPlayer, Moves compMove) {
         RoundResults value = resultLabel[playerMove.getResultLabelPosition()][compMove.getResultLabelPosition()];
         switch (value) {
             case TIE:
@@ -87,11 +87,11 @@ public class GameLogicController {
         }
     }
 
-    private void showCurrentGameScore(UserPlayer player, CompPlayer compPlayer) {
-        System.out.println("\n" + player.getName() + " " + player.getRoundPoints() + " : " + compPlayer.getRoundPoints() + " " + compPlayer.getName() + "\n");
+    public String showCurrentGameScore(UserPlayer player, CompPlayer compPlayer) {
+        return "\n" + player.getName() + " " + player.getRoundPoints() + " : " + compPlayer.getRoundPoints() + " " + compPlayer.getName() + "\n";
     }
 
-    private void clearCurrentGameRoundPoints(CompPlayer compPlayer, UserPlayer player) {
+    public void clearCurrentGameRoundPoints(CompPlayer compPlayer, UserPlayer player) {
         player.setRoundPoints(0);
         compPlayer.setRoundPoints(0);
     }

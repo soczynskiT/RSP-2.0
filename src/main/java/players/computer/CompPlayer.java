@@ -1,13 +1,11 @@
 package players.computer;
 
 import enums.Moves;
-import players.Player;
 
 import java.util.*;
 
-public class CompPlayer implements Player {
+public class CompPlayer {
     final private Random randomChoice = new Random();
-    final private Scanner chanceModifierScanner = new Scanner(System.in);
     final private List<Moves> choiceList = new ArrayList<>();
 
     private int roundPoints;
@@ -15,7 +13,7 @@ public class CompPlayer implements Player {
     private int loseChancesModifier;
     private int drawChancesModifier;
 
-    public void setComputerChances(Moves playerMove) {
+    public void setComputerChances(Moves playerMove, List<Moves> choiceList) {
         choiceList.clear();
 
         switch (playerMove) {
@@ -55,27 +53,9 @@ public class CompPlayer implements Player {
         }
     }
 
-    @Override
     public Moves makeMove() {
         final int compChoice = randomChoice.nextInt(choiceList.size());
         return choiceList.get(compChoice);
-    }
-
-    @Override
-    public void addRoundPoint() {
-        roundPoints++;
-    }
-
-    public String getName() {
-        return "Computer";
-    }
-
-    public int getRoundPoints() {
-        return roundPoints;
-    }
-
-    public void setRoundPoints(int roundPoints) {
-        this.roundPoints = roundPoints;
     }
 
     public void setDefaultChancesModifiersValues() {
@@ -84,7 +64,7 @@ public class CompPlayer implements Player {
         this.drawChancesModifier = 100;
     }
 
-    public void setWinChancesModifier() {
+    public void setWinChancesModifier(Scanner chanceModifierScanner) {
         boolean isEntryCorrect = true;
         while (isEntryCorrect) {
             try {
@@ -104,7 +84,7 @@ public class CompPlayer implements Player {
         }
     }
 
-    public void setLoseChancesModifier() {
+    public void setLoseChancesModifier(Scanner chanceModifierScanner) {
         boolean isEntryCorrect = true;
         while (isEntryCorrect) {
             try {
@@ -124,7 +104,7 @@ public class CompPlayer implements Player {
         }
     }
 
-    public void setDrawChancesModifier() {
+    public void setDrawChancesModifier(Scanner chanceModifierScanner) {
         boolean isEntryCorrect = true;
         while (isEntryCorrect) {
             try {
@@ -150,5 +130,37 @@ public class CompPlayer implements Player {
                 "Win chance: " + String.format("%.2f", winChancesModifier / sum * 100) + "%\n" +
                 "Lose chance: " + String.format("%.2f", loseChancesModifier / sum * 100) + "%\n" +
                 "Draw chance: " + String.format("%.2f", drawChancesModifier / sum * 100) + "%\n");
+    }
+
+    public void addRoundPoint() {
+        roundPoints++;
+    }
+
+    public void setRoundPoints(int roundPoints) {
+        this.roundPoints = roundPoints;
+    }
+
+    public String getName() {
+        return "Computer";
+    }
+
+    public int getRoundPoints() {
+        return roundPoints;
+    }
+
+    public int getWinChancesModifier() {
+        return winChancesModifier;
+    }
+
+    public int getLoseChancesModifier() {
+        return loseChancesModifier;
+    }
+
+    public int getDrawChancesModifier() {
+        return drawChancesModifier;
+    }
+
+    public List<Moves> getChoiceList() {
+        return choiceList;
     }
 }

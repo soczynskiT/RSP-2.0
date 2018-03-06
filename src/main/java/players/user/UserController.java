@@ -5,8 +5,6 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class UserController {
-    final private Scanner newPlayerNameScan = new Scanner(System.in);
-    final private Scanner existingPlayerNameScan = new Scanner(System.in);
     final private Set<UserPlayer> playersSet = new HashSet<>();
     final private UserPlayer tempPlayer = new UserPlayer("tempName");
     private UserPlayer currentPlayer;
@@ -15,8 +13,7 @@ public class UserController {
         this.currentPlayer = currentPlayer;
     }
 
-    public void createFirstPlayer() {
-        final Scanner firstPlayerNameScan = new Scanner(System.in);
+    public void createFirstPlayer(Scanner firstPlayerNameScan) {
         System.out.println("Enter your name:");
         boolean isCorrect = true;
         String name = "";
@@ -33,7 +30,7 @@ public class UserController {
         addPlayerToAllPlayersSet(currentPlayer);
     }
 
-    public void createNewPlayer() {
+    public void createNewPlayer(Scanner newPlayerNameScan) {
         final String newPlayerName = newPlayerNameScan.nextLine();
         tempPlayer.setName(newPlayerName);
         if (!newPlayerName.trim().isEmpty() && !newPlayerName.equals("1") && !playersSet.contains(tempPlayer)) {
@@ -46,7 +43,7 @@ public class UserController {
         }
     }
 
-    public void changeCurrentPlayer() {
+    public void changeCurrentPlayer(Scanner existingPlayerNameScan) {
         System.out.println("Please choose existing player by typing full name (uppercase matters !), \"ENTER\" to confirm.");
         allPlayersSetDisplay();
         System.out.println("\n[1] ~~ Abort");
@@ -83,8 +80,12 @@ public class UserController {
         }
     }
 
-    private void addPlayerToAllPlayersSet(UserPlayer player) {
+    public void addPlayerToAllPlayersSet(UserPlayer player) {
         playersSet.add(player);
+    }
+
+    public Set<UserPlayer> getPlayersSet() {
+        return playersSet;
     }
 
     public UserPlayer getCurrentPlayer() {
