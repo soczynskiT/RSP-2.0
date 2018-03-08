@@ -1,23 +1,40 @@
 package enums;
 
 public enum Moves {
-    R("Rock", 0),
-    S("Scissors", 1),
-    P("Paper", 2);
+    R("Rock") {
+        public RoundResults getRoundResult(Moves compMove) {
+                if (compMove == Moves.S) {
+                    return RoundResults.WIN;
+                }
+                return RoundResults.LOSE;
+        }
+    },
+    S("Scissors"){
+        public RoundResults getRoundResult(Moves compMove) {
+            if (compMove == Moves.P) {
+                return RoundResults.WIN;
+            }
+            return RoundResults.LOSE;
+        }
+    },
+    P("Paper") {
+        public RoundResults getRoundResult(Moves compMove) {
+            if (compMove == Moves.R) {
+                return RoundResults.WIN;
+            }
+            return RoundResults.LOSE;
+        }
+    };
 
     private String name;
-    private int resultLabelPosition;
 
-    Moves(String s, int resultLabelPosition) {
+    Moves(String s) {
         this.name = s;
-        this.resultLabelPosition = resultLabelPosition;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getResultLabelPosition() {
-        return resultLabelPosition;
-    }
+    public abstract RoundResults getRoundResult(Moves compMove);
 }

@@ -11,19 +11,6 @@ import java.util.InputMismatchException;
 
 public class GameLogicController {
     final private Scanner userScanner = new Scanner(System.in);
-    final private RoundResults[][] resultLabel = new RoundResults[3][3];
-
-    public void createResultLabel() {
-        resultLabel[0][0] = RoundResults.TIE;
-        resultLabel[0][1] = RoundResults.WIN;
-        resultLabel[0][2] = RoundResults.LOSE;
-        resultLabel[1][0] = RoundResults.LOSE;
-        resultLabel[1][1] = RoundResults.TIE;
-        resultLabel[1][2] = RoundResults.WIN;
-        resultLabel[2][0] = RoundResults.WIN;
-        resultLabel[2][1] = RoundResults.LOSE;
-        resultLabel[2][2] = RoundResults.TIE;
-    }
 
     public void playNewGame(CompPlayer compPlayer, UserController userController, Scanner gameLogicScanner) {
         System.out.println("Pleas enter rounds - to win number: (min 1 - max 10):");
@@ -74,7 +61,15 @@ public class GameLogicController {
     }
 
     public void addOneRoundPointToRoundWinner(UserPlayer player, Moves playerMove, CompPlayer compPlayer, Moves compMove) {
-        RoundResults value = resultLabel[playerMove.getResultLabelPosition()][compMove.getResultLabelPosition()];
+        final RoundResults value;
+
+        if (playerMove.equals(compMove)) {
+            value = RoundResults.TIE;
+        }
+        else {
+            value = playerMove.getRoundResult(compMove);
+        }
+
         switch (value) {
             case TIE:
                 break;

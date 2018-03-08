@@ -73,7 +73,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerRockCompRock() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.R;
         final Moves compMove = Moves.R;
@@ -89,7 +88,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerRockCompPaper() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.R;
         final Moves compMove = Moves.P;
@@ -105,7 +103,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerRockCompScissors() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.R;
         final Moves compMove = Moves.S;
@@ -121,7 +118,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerPaperCompRock() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.P;
         final Moves compMove = Moves.R;
@@ -137,7 +133,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerPaperCompScissors() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.P;
         final Moves compMove = Moves.S;
@@ -153,7 +148,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerPaperCompPaper() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.P;
         final Moves compMove = Moves.P;
@@ -169,7 +163,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerScissorsCompRock() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.S;
         final Moves compMove = Moves.R;
@@ -185,7 +178,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerScissorsCompPaper() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.S;
         final Moves compMove = Moves.P;
@@ -201,7 +193,6 @@ public class RSPTestSuite {
     public void testOfAddingOnePointToRoundWinnerPlayerScissorsCompScissors() {
         //Given
         gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        gameLogicController.createResultLabel();
 
         final Moves playerMove = Moves.S;
         final Moves compMove = Moves.S;

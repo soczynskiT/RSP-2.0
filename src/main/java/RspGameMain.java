@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class RspGameMain {
     public static void main(String args[]) {
 
+
         final UserController userController = new UserController(new UserPlayer("temp"));
         userController.createFirstPlayer(new Scanner(System.in));
 
@@ -16,7 +17,6 @@ public class RspGameMain {
         compPlayer.setDefaultChancesModifiersValues();
 
         final GameLogicController logicController = new GameLogicController();
-        logicController.createResultLabel();
         final GameStructureController structureController = new GameStructureController(compPlayer, userController, logicController);
 
         structureController.mainMenu();
