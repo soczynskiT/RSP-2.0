@@ -4,55 +4,69 @@ import enums.Moves;
 import players.Player;
 
 import java.util.Objects;
-import java.util.Scanner;
 
 public class UserPlayer implements Player {
-
     private String name;
     private int wonGames;
     private int lostGames;
     private int roundPoints;
 
-    public UserPlayer(String name) {
+    public UserPlayer(final String name) {
         this.name = name;
     }
 
-    @Override
-    public Moves makeMove(Scanner userScanner) {
+    public Moves makeMove(UserMoveReader userMoveReader) {
         System.out.println("[R] ~~ " + Moves.R.getName());
         System.out.println("[P] ~~ " + Moves.P.getName());
         System.out.println("[S] ~~ " + Moves.S.getName());
 
-        boolean isChoiceWrong = true;
+        return getPlayerMove(userMoveReader);
+    }
+
+    private Moves getPlayerMove(UserMoveReader userMoveReader) {
+        boolean isMoveCorrect = true;
         Moves result = null;
-        do {
-            final String moveChoice = userScanner.nextLine().toUpperCase();
-            try {
-                switch (Moves.valueOf(moveChoice)) {
-                    case R:
-                        result = Moves.R;
-                        isChoiceWrong = false;
-                        break;
-                    case P:
-                        result = Moves.P;
-                        isChoiceWrong = false;
-                        break;
-                    case S:
-                        result = Moves.S;
-                        isChoiceWrong = false;
-                        break;
-                }
-            } catch (IllegalArgumentException e) {
-                System.out.println("! Wrong choice, please try again !");
+        while (isMoveCorrect) {
+            final String moveChoice = userMoveReader.readMove().toUpperCase();
+            switch (moveChoice) {
+                case "R":
+                    result = Moves.R;
+                    isMoveCorrect = false;
+                    break;
+                case "P":
+                    result = Moves.P;
+                    isMoveCorrect = false;
+                    break;
+                case "S":
+                    result = Moves.S;
+                    isMoveCorrect = false;
+                    break;
+                default:
+                    System.out.println("Wrong choice, try again");
+                    return getPlayerMove(userMoveReader);
             }
         }
-        while (isChoiceWrong);
         return result;
     }
 
     @Override
     public void addRoundPoint() {
         roundPoints++;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public int getRoundPoints() {
+        return roundPoints;
+    }
+
+    @Override
+    public void setRoundPoints(int roundPoints) {
+        this.roundPoints = roundPoints;
     }
 
     public void incWonGames() {
@@ -63,10 +77,6 @@ public class UserPlayer implements Player {
         this.lostGames++;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public int getWonGames() {
         return wonGames;
     }
@@ -75,16 +85,8 @@ public class UserPlayer implements Player {
         return lostGames;
     }
 
-    public int getRoundPoints() {
-        return roundPoints;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setRoundPoints(int roundPoints) {
-        this.roundPoints = roundPoints;
     }
 
     @Override

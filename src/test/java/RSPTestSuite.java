@@ -1,21 +1,22 @@
+
 import enums.Moves;
-import gamecode.GameLogicController;
+import gamecode.NewGameController;
+import gamecode.SingleRoundController;
 import org.junit.*;
+
 import players.computer.CompPlayer;
 import players.user.UserController;
+import players.user.UserMoveReader;
 import players.user.UserPlayer;
 
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class RSPTestSuite {
-    final private GameLogicController gameLogicController = new GameLogicController();
-    final private UserPlayer player = new UserPlayer("name");
-    final private UserController userController = new UserController(player);
-    final private CompPlayer compPlayer = new CompPlayer();
+    private final static UserMoveReader USER_MOVE_READER_MOCK = mock(UserMoveReader.class);
+    private final CompPlayer compPlayer = new CompPlayer();
+    private final UserController userController = new UserController();
 
     private static int TEST_COUNTER = 1;
 
@@ -40,452 +41,192 @@ public class RSPTestSuite {
         System.out.println("All tests end.");
     }
 
-    /* Test of GameLogicController Class */
+    /* Test of ComPlayer class */
     @Test
-    public void testClearCurrentRoundPoints() {
+    public void testSetComputerChances() {
         //Given
-        player.setRoundPoints(5);
-        compPlayer.setRoundPoints(5);
-
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(1);
+        compPlayer.setWinChancesModifier(USER_MOVE_READER_MOCK);
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(2);
+        compPlayer.setLoseChancesModifier(USER_MOVE_READER_MOCK);
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(3);
+        compPlayer.setDrawChancesModifier(USER_MOVE_READER_MOCK);
+        int win = 0;
+        int lose = 0;
+        int draw = 0;
         //When
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
+        compPlayer.setComputerChances(Moves.P);
+        for (Moves move : compPlayer.getChoiceList()) {
+            if (move.equals(Moves.S)) {
+                win++;
+            } else if (move.equals(Moves.R)) {
+                lose++;
+            } else {
+                draw++;
+            }
+        }
         //Then
-        Assert.assertTrue(0 == player.getRoundPoints() && 0 == compPlayer.getRoundPoints());
+        Assert.assertTrue(win == 1 && lose == 2 && draw == 3);
+    }
+
+    /* Test of UserPlayer class. */
+    @Test
+    public void testMakeMoveRock() {
+        //Given
+        final UserPlayer userPlayer = new UserPlayer("name");
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("r");
+        //When
+        final Moves playerMove = userPlayer.makeMove(USER_MOVE_READER_MOCK);
+        //Then
+        Assert.assertEquals(Moves.R, playerMove);
     }
 
     @Test
-    public void testSetNumberOfRoundsToWin() {
+    public void testMakeMovePaper() {
         //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-        final int expectedResult = 5;
-        final ByteArrayInputStream stream = new ByteArrayInputStream("5".getBytes());
-        final Scanner testScanner = new Scanner(stream);
-
+        final UserPlayer userPlayer = new UserPlayer("name");
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("p");
         //When
-        final int result = gameLogicController.setNumberOfRoundsToWIn(testScanner);
-
+        final Moves playerMove = userPlayer.makeMove(USER_MOVE_READER_MOCK);
         //Then
-        Assert.assertTrue(expectedResult == result);
+        Assert.assertEquals(Moves.P, playerMove);
     }
 
     @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerRockCompRock() {
+    public void testMakeMoveScissors() {
         //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.R;
-        final Moves compMove = Moves.R;
-
+        final UserPlayer userPlayer = new UserPlayer("name");
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("s");
         //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
+        final Moves playerMove = userPlayer.makeMove(USER_MOVE_READER_MOCK);
         //Then
-        Assert.assertTrue(0 == player.getRoundPoints() && 0 == compPlayer.getRoundPoints());
+        Assert.assertEquals(Moves.S, playerMove);
     }
 
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerRockCompPaper() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.R;
-        final Moves compMove = Moves.P;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(0 == player.getRoundPoints() && 1 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerRockCompScissors() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.R;
-        final Moves compMove = Moves.S;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(1 == player.getRoundPoints() && 0 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerPaperCompRock() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.P;
-        final Moves compMove = Moves.R;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(1 == player.getRoundPoints() && 0 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerPaperCompScissors() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.P;
-        final Moves compMove = Moves.S;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(0 == player.getRoundPoints() && 1 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerPaperCompPaper() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.P;
-        final Moves compMove = Moves.P;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(0 == player.getRoundPoints() && 0 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerScissorsCompRock() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.S;
-        final Moves compMove = Moves.R;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(0 == player.getRoundPoints() && 1 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerScissorsCompPaper() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.S;
-        final Moves compMove = Moves.P;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(1 == player.getRoundPoints() && 0 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testOfAddingOnePointToRoundWinnerPlayerScissorsCompScissors() {
-        //Given
-        gameLogicController.clearCurrentGameRoundPoints(compPlayer, player);
-
-        final Moves playerMove = Moves.S;
-        final Moves compMove = Moves.S;
-
-        //When
-        gameLogicController.addOneRoundPointToRoundWinner(player, playerMove, compPlayer, compMove);
-
-        //Then
-        Assert.assertTrue(0 == player.getRoundPoints() && 0 == compPlayer.getRoundPoints());
-    }
-
-    @Test
-    public void testShowCurrentScore() {
-        //Given
-        player.setRoundPoints(5);
-        compPlayer.setRoundPoints(4);
-
-        final String expectedResult = "\nname 5 : 4 Computer\n";
-
-        //When
-        final String testedMethodResult = gameLogicController.showCurrentGameScore(player, compPlayer);
-
-        //Then
-        Assert.assertTrue(expectedResult.equals(testedMethodResult));
-    }
-
-    /* Test of CompPlayer logic */
-    @Test
-    public void testSetDrawChancesModifier() {
-        //Given
-        final ByteArrayInputStream stream = new ByteArrayInputStream("10".getBytes());
-        final Scanner scanner = new Scanner(stream);
-
-        compPlayer.setDefaultChancesModifiersValues();
-
-        //When
-        compPlayer.setDrawChancesModifier(scanner);
-
-        //Then
-        Assert.assertTrue(10 == compPlayer.getDrawChancesModifier());
-    }
-
-    @Test
-    public void testSetWinChancesModifier() {
-        //Given
-        final ByteArrayInputStream stream = new ByteArrayInputStream("10".getBytes());
-        final Scanner scanner = new Scanner(stream);
-
-        compPlayer.setDefaultChancesModifiersValues();
-
-        //When
-        compPlayer.setWinChancesModifier(scanner);
-
-        //Then
-        Assert.assertTrue(10 == compPlayer.getWinChancesModifier());
-    }
-
-    @Test
-    public void testSetLoseChancesModifier() {
-        //Given
-        final ByteArrayInputStream stream = new ByteArrayInputStream("10".getBytes());
-        final Scanner scanner = new Scanner(stream);
-
-        compPlayer.setDefaultChancesModifiersValues();
-
-        //When
-        compPlayer.setLoseChancesModifier(scanner);
-
-        //Then
-        Assert.assertTrue(10 == compPlayer.getLoseChancesModifier());
-    }
-
-    @Test
-    public void testSetComputerChancesWithPlayerMoveRock() {
-        //Given
-        final List<Moves> choiceList = new ArrayList<>();
-        final Moves playerMove = Moves.R;
-        final ByteArrayInputStream loseStream = new ByteArrayInputStream("1".getBytes());
-        final ByteArrayInputStream winStream = new ByteArrayInputStream("2".getBytes());
-        final ByteArrayInputStream drawStream = new ByteArrayInputStream("3".getBytes());
-
-        compPlayer.setLoseChancesModifier(new Scanner(loseStream));
-        compPlayer.setDrawChancesModifier(new Scanner(drawStream));
-        compPlayer.setWinChancesModifier(new Scanner(winStream));
-
-        //When
-        compPlayer.setComputerChances(playerMove, choiceList);
-        long rock = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.R))
-                .count();
-        long paper = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.P))
-                .count();
-        long scissors = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.S))
-                .count();
-
-        //Then
-        Assert.assertTrue(rock == 3 && paper == 2 && scissors == 1);
-    }
-
-    @Test
-    public void testSetComputerChancesWithPlayerMovePaper() {
-        //Given
-        final List<Moves> choiceList = new ArrayList<>();
-        final Moves playerMove = Moves.P;
-        final ByteArrayInputStream loseStream = new ByteArrayInputStream("1".getBytes());
-        final ByteArrayInputStream winStream = new ByteArrayInputStream("2".getBytes());
-        final ByteArrayInputStream drawStream = new ByteArrayInputStream("3".getBytes());
-
-        compPlayer.setLoseChancesModifier(new Scanner(loseStream));
-        compPlayer.setDrawChancesModifier(new Scanner(drawStream));
-        compPlayer.setWinChancesModifier(new Scanner(winStream));
-
-        //When
-        compPlayer.setComputerChances(playerMove, choiceList);
-        long rock = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.R))
-                .count();
-        long paper = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.P))
-                .count();
-        long scissors = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.S))
-                .count();
-
-        //Then
-        Assert.assertTrue(rock == 1 && paper == 3 && scissors == 2);
-    }
-
-    @Test
-    public void testSetComputerChancesWithPlayerMoveScissors() {
-        //Given
-        final List<Moves> choiceList = new ArrayList<>();
-        final Moves playerMove = Moves.S;
-        final ByteArrayInputStream loseStream = new ByteArrayInputStream("1".getBytes());
-        final ByteArrayInputStream winStream = new ByteArrayInputStream("2".getBytes());
-        final ByteArrayInputStream drawStream = new ByteArrayInputStream("3".getBytes());
-
-        compPlayer.setLoseChancesModifier(new Scanner(loseStream));
-        compPlayer.setDrawChancesModifier(new Scanner(drawStream));
-        compPlayer.setWinChancesModifier(new Scanner(winStream));
-
-        //When
-        compPlayer.setComputerChances(playerMove, choiceList);
-        long rock = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.R))
-                .count();
-        long paper = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.P))
-                .count();
-        long scissors = choiceList.stream()
-                .filter(moves -> moves.equals(Moves.S))
-                .count();
-
-        //Then
-        Assert.assertTrue(rock == 2 && paper == 1 && scissors == 3);
-    }
-
-    /*Test of UserPlayer class */
-    @Test
-    public void testUserPlayerMakeMovePaper() {
-        //Given
-        final Moves expectedMove = Moves.P;
-        final ByteArrayInputStream playerMove = new ByteArrayInputStream("p".getBytes());
-
-        //When
-        final Moves resultMove = player.makeMove(new Scanner(playerMove));
-
-        //Then
-        Assert.assertTrue(expectedMove.equals(resultMove));
-    }
-
-    @Test
-    public void testUserPlayerMakeMoveScissors() {
-        //Given
-        final Moves expectedMove = Moves.S;
-        final ByteArrayInputStream playerMove = new ByteArrayInputStream("s".getBytes());
-
-        //When
-        final Moves resultMove = player.makeMove(new Scanner(playerMove));
-
-        //Then
-        Assert.assertTrue(expectedMove.equals(resultMove));
-    }
-
-    @Test
-    public void testUserPlayerMakeMoveRock() {
-        //Given
-        final Moves expectedMove = Moves.R;
-        final ByteArrayInputStream playerMove = new ByteArrayInputStream("r".getBytes());
-
-        //When
-        final Moves resultMove = player.makeMove(new Scanner(playerMove));
-
-        //Then
-        Assert.assertTrue(expectedMove.equals(resultMove));
-    }
-
-    /* Tests of USerPlayer logic */
-    @Test
-    public void testAddPlayerToAllPlayersDatabase() {
-        //Given
-        final UserPlayer somePlayer = new UserPlayer("somePlayer");
-
-        //When
-        userController.addPlayerToAllPlayersSet(somePlayer);
-
-        //Then
-        Assert.assertTrue(userController.getPlayersSet().contains(somePlayer));
-    }
-
+    /* Test of UserController class. */
     @Test
     public void testCreateFirstPlayer() {
         //Given
-        final String name = "firstPlayer";
-        final UserPlayer newPlayer = new UserPlayer(name);
-        final ByteArrayInputStream firstPlayerName = new ByteArrayInputStream("firstPlayer".getBytes());
-
+        final String firsPlayerName = "firstPlayer";
+        final UserPlayer firstUserPlayer = new UserPlayer(firsPlayerName);
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn(firsPlayerName);
         //When
-        userController.createFirstPlayer(new Scanner(firstPlayerName));
-
+        userController.createFirstPlayer(USER_MOVE_READER_MOCK);
         //Then
-        Assert.assertEquals(userController.getCurrentPlayer(), newPlayer);
+        Assert.assertEquals(firsPlayerName, userController.getCurrentPlayer().getName());
+        Assert.assertTrue(userController.getPlayersSet().contains(firstUserPlayer));
     }
 
     @Test
     public void testCreateNewPlayer() {
-        //Given
-        final String name = "randomNewPlayer";
-        final UserPlayer newPlayer = new UserPlayer(name);
-        final ByteArrayInputStream newPlayerName = new ByteArrayInputStream("randomNewPlayer".getBytes());
+        final String newPlayerName = "newPlayerName";
+        final UserPlayer newPlayer = new UserPlayer(newPlayerName);
 
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn(newPlayerName);
         //When
-        userController.createNewPlayer(new Scanner(newPlayerName));
-
+        userController.createNewPlayer(USER_MOVE_READER_MOCK);
         //Then
         Assert.assertEquals(userController.getCurrentPlayer(), newPlayer);
         Assert.assertTrue(userController.getPlayersSet().contains(newPlayer));
     }
 
     @Test
-    public void testChangeCurrentPlayerForExistingPlayer() {
+    public void testChangeCurrentPlayerForExistingOne() {
         //Given
-        final UserPlayer playerOne = new UserPlayer("player1");
-        final UserPlayer playerTwo = new UserPlayer("player2");
-        final ByteArrayInputStream playerToChangeName = new ByteArrayInputStream("player1".getBytes());
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("player1");
+        userController.createNewPlayer(USER_MOVE_READER_MOCK);
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("player2");
+        userController.createNewPlayer(USER_MOVE_READER_MOCK);
 
-        userController.addPlayerToAllPlayersSet(playerOne);
-        userController.addPlayerToAllPlayersSet(playerTwo);
-
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("player1");
         //When
-        userController.changeCurrentPlayer(new Scanner(playerToChangeName));
-
+        userController.changeCurrentPlayer(USER_MOVE_READER_MOCK);
         //Then
-        Assert.assertEquals(userController.getCurrentPlayer(), playerOne);
+        Assert.assertEquals(new UserPlayer("player1"), userController.getCurrentPlayer());
     }
 
     @Test
-    public void testChangeCurrentPlayerForNotExistingPlayer() {
+    public void testChangeCurrentPlayerForNonExistingOne() {
         //Given
-        final UserPlayer playerOne = new UserPlayer("playerRandom");
-        final ByteArrayInputStream playerToChangeName = new ByteArrayInputStream("playerRandom".getBytes());
-
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("player1");
+        userController.createNewPlayer(USER_MOVE_READER_MOCK);
+        final UserPlayer player2 = new UserPlayer("player2");
         //When
-        userController.changeCurrentPlayer(new Scanner(playerToChangeName));
-
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("player2");
+        userController.changeCurrentPlayer(USER_MOVE_READER_MOCK);
         //Then
-        Assert.assertFalse(userController.getPlayersSet().contains(playerOne));
-        Assert.assertFalse(userController.getCurrentPlayer().equals(playerOne));
+        Assert.assertFalse(player2.equals(userController.getCurrentPlayer()));
+        Assert.assertFalse(userController.getPlayersSet().contains(player2));
+    }
+
+    /* Test of SingleRoundController class */
+    @Test
+    public void testPlaySingleRoundPlayerWinsResult() {
+        //Given
+        final SingleRoundController singleRoundController = new SingleRoundController();
+        final CompPlayer compPlayerMock = mock(CompPlayer.class);
+
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("r");
+        when(compPlayerMock.makeMove()).thenReturn(Moves.S);
+        // When
+        singleRoundController.playSingleRound(compPlayerMock, userController, USER_MOVE_READER_MOCK);
+        //Then
+        Assert.assertTrue(1 == userController.getCurrentPlayer().getRoundPoints());
+        Assert.assertTrue(0 == compPlayerMock.getRoundPoints());
     }
 
     @Test
-    public void testIncWonGames() {
+    public void testPlaySingleRoundPlayerLoseResult() {
         //Given
-        final int wonPointsValue = player.getWonGames() + 1;
-
-        //When
-        player.incWonGames();
-
+        final SingleRoundController singleRoundController = new SingleRoundController();
+        final CompPlayer compPlayerMock = mock(CompPlayer.class);
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("s");
+        when(compPlayerMock.makeMove()).thenReturn(Moves.R);
+        // When
+        singleRoundController.playSingleRound(compPlayerMock, userController, USER_MOVE_READER_MOCK);
         //Then
-        Assert.assertEquals(player.getWonGames(), wonPointsValue);
+        Assert.assertTrue(0 == userController.getCurrentPlayer().getRoundPoints());
     }
 
     @Test
-    public void testIncLostGames() {
+    public void testPlaySingleRoundDrawResult() {
         //Given
-        final int lostPointsValue = player.getLostGames() + 1;
-
-        //When
-        player.incLostGames();
-
+        final SingleRoundController singleRoundController = new SingleRoundController();
+        final CompPlayer compPlayerMock = mock(CompPlayer.class);
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("s");
+        when(compPlayerMock.makeMove()).thenReturn(Moves.S);
+        // When
+        singleRoundController.playSingleRound(compPlayerMock, userController, USER_MOVE_READER_MOCK);
         //Then
-        Assert.assertEquals(player.getLostGames(), lostPointsValue);
+        Assert.assertTrue(0 == userController.getCurrentPlayer().getRoundPoints());
+    }
+
+    /* Test of NewGameController class. */
+    @Test
+    public void testPlayNewGamePlayerWins() {
+        //Given
+        final CompPlayer compPlayerMock = mock(CompPlayer.class);
+        final NewGameController newGameController = new NewGameController();
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(1);
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("r");
+        when(compPlayerMock.makeMove()).thenReturn(Moves.S);
+        //When
+        newGameController.playNewGame(compPlayerMock, userController, USER_MOVE_READER_MOCK);
+        //Then
+        Assert.assertTrue(1 == userController.getCurrentPlayer().getWonGames());
+    }
+    @Test
+    public void testPlayNewGamePlayerLoses() {
+        //Given
+        final CompPlayer compPlayerMock = mock(CompPlayer.class);
+        final NewGameController newGameController = new NewGameController();
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(1);
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("s");
+        when(compPlayerMock.makeMove()).thenReturn(Moves.R);
+        when(compPlayerMock.getRoundPoints()).thenReturn(0).thenReturn(1);
+        //When
+        newGameController.playNewGame(compPlayerMock, userController, USER_MOVE_READER_MOCK);
+        //Then
+        Assert.assertTrue(1 == userController.getCurrentPlayer().getLostGames());
     }
 }

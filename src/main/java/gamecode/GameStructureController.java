@@ -2,27 +2,19 @@ package gamecode;
 
 import players.computer.CompPlayer;
 import players.user.UserController;
-
-import java.util.Scanner;
+import players.user.UserMoveReader;
 
 public class GameStructureController {
+    private final UserMoveReader userMoveReader;
+    private final CompPlayer compPlayer;
+    private final UserController userController;
+    private final NewGameController logicController;
 
-    final private Scanner mainMenuScan = new Scanner(System.in);
-    final private Scanner settingsMenuScan = new Scanner(System.in);
-    final private Scanner compSetMenuScan = new Scanner(System.in);
-    final private Scanner exitMenuScan = new Scanner(System.in);
-    final private Scanner chanceModifierScanner = new Scanner(System.in);
-    final private Scanner newPLayerNameScan = new Scanner(System.in);
-    final private Scanner existingPlayerNameScan = new Scanner(System.in);
-    final private Scanner gameLogicScanner = new Scanner(System.in);
-    final private CompPlayer compPlayer;
-    final private UserController userController;
-    final private GameLogicController logicController;
-
-    public GameStructureController(CompPlayer compPlayer, UserController userController, GameLogicController logicController) {
+    public GameStructureController(CompPlayer compPlayer, UserController userController, NewGameController logicController, UserMoveReader userMoveReader) {
         this.compPlayer = compPlayer;
         this.userController = userController;
         this.logicController = logicController;
+        this.userMoveReader = userMoveReader;
     }
 
     public void mainMenu() {
@@ -31,10 +23,10 @@ public class GameStructureController {
         System.out.println("[3] ~~ Current players stats.");
         System.out.println("[X] ~~ Exit.");
 
-        final String mainMenuChoice = mainMenuScan.nextLine().toUpperCase();
+        final String mainMenuChoice = userMoveReader.readMove().toUpperCase();
         switch (mainMenuChoice) {
             case "1":
-                logicController.playNewGame(compPlayer, userController, gameLogicScanner);
+                logicController.playNewGame(compPlayer, userController, userMoveReader);
                 mainMenu();
                 break;
             case "2":
@@ -60,15 +52,15 @@ public class GameStructureController {
         System.out.println("[3] ~~ Modify game difficulty.");
         System.out.println("[4] ~~ Back to main menu.");
 
-        final String settingsChoice = settingsMenuScan.nextLine();
+        final String settingsChoice = userMoveReader.readMove();
         switch (settingsChoice) {
             case "1":
                 System.out.println("Please enter new player name.");
-                userController.createNewPlayer(newPLayerNameScan);
+                userController.createNewPlayer(userMoveReader);
                 settingsMenu();
                 break;
             case "2":
-                userController.changeCurrentPlayer(existingPlayerNameScan);
+                userController.changeCurrentPlayer(userMoveReader);
                 settingsMenu();
                 break;
             case "3":
@@ -84,7 +76,7 @@ public class GameStructureController {
     }
 
     private void gameExit() {
-        final String exitMenuChoice = exitMenuScan.nextLine().toUpperCase();
+        final String exitMenuChoice = userMoveReader.readMove().toUpperCase();
         switch (exitMenuChoice) {
             case "Y":
                 break;
@@ -105,18 +97,18 @@ public class GameStructureController {
         System.out.println("[5] ~~ Check current settings in %.");
         System.out.println("[6] ~~ Back to settings menu.");
 
-        final String compSetMenuChoice = compSetMenuScan.nextLine();
+        final String compSetMenuChoice = userMoveReader.readMove();
         switch (compSetMenuChoice) {
             case "1":
-                compPlayer.setWinChancesModifier(chanceModifierScanner);
+                compPlayer.setWinChancesModifier(userMoveReader);
                 compSettingsMenu();
                 break;
             case "2":
-                compPlayer.setLoseChancesModifier(chanceModifierScanner);
+                compPlayer.setLoseChancesModifier(userMoveReader);
                 compSettingsMenu();
                 break;
             case "3":
-                compPlayer.setDrawChancesModifier(chanceModifierScanner);
+                compPlayer.setDrawChancesModifier(userMoveReader);
                 compSettingsMenu();
                 break;
             case "4":

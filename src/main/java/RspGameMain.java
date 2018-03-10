@@ -1,23 +1,22 @@
 import gamecode.GameStructureController;
-import gamecode.GameLogicController;
+import gamecode.NewGameController;
 import players.computer.CompPlayer;
 import players.user.UserController;
-import players.user.UserPlayer;
-
-import java.util.Scanner;
+import players.user.UserMoveReader;
 
 public class RspGameMain {
     public static void main(String args[]) {
+        final UserMoveReader userMoveReader = new UserMoveReader();
 
-
-        final UserController userController = new UserController(new UserPlayer("temp"));
-        userController.createFirstPlayer(new Scanner(System.in));
+        final UserController userController = new UserController();
+        userController.createFirstPlayer(userMoveReader);
 
         final CompPlayer compPlayer = new CompPlayer();
         compPlayer.setDefaultChancesModifiersValues();
 
-        final GameLogicController logicController = new GameLogicController();
-        final GameStructureController structureController = new GameStructureController(compPlayer, userController, logicController);
+        final NewGameController newGameController = new NewGameController();
+
+        final GameStructureController structureController = new GameStructureController(compPlayer, userController, newGameController, userMoveReader);
 
         structureController.mainMenu();
     }

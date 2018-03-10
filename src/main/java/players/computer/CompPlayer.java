@@ -1,55 +1,61 @@
 package players.computer;
 
 import enums.Moves;
+import players.Player;
+import players.user.UserMoveReader;
 
 import java.util.*;
 
-public class CompPlayer {
-    final private Random randomChoice = new Random();
-    final private List<Moves> choiceList = new ArrayList<>();
-
+public class CompPlayer implements Player {
     private int roundPoints;
     private int winChancesModifier;
     private int loseChancesModifier;
     private int drawChancesModifier;
 
-    public void setComputerChances(Moves playerMove, List<Moves> choiceList) {
-        choiceList.clear();
+    private final Random randomChoice;
+    private final List<Moves> choiceList;
 
+    public CompPlayer() {
+        this.randomChoice = new Random();
+        this.choiceList = new ArrayList<>();
+    }
+
+    public void setComputerChances(Moves playerMove) {
+        choiceList.clear();
         switch (playerMove) {
             case R:
-                for (int i = 0; i < winChancesModifier; i++) {
-                    choiceList.add(Moves.P);
-                }
-                for (int i = 0; i < loseChancesModifier; i++) {
-                    choiceList.add(Moves.S);
-                }
-                for (int i = 0; i < drawChancesModifier; i++) {
-                    choiceList.add(Moves.R);
-                }
+                addWinChoicesToChoiceList(Moves.P);
+                addLoseChoicesToChoiceLIst(Moves.S);
+                addDrawChoicesToChoiceList(Moves.R);
                 break;
             case S:
-                for (int i = 0; i < winChancesModifier; i++) {
-                    choiceList.add(Moves.R);
-                }
-                for (int i = 0; i < loseChancesModifier; i++) {
-                    choiceList.add(Moves.P);
-                }
-                for (int i = 0; i < drawChancesModifier; i++) {
-                    choiceList.add(Moves.S);
-                }
+                addWinChoicesToChoiceList(Moves.R);
+                addLoseChoicesToChoiceLIst(Moves.P);
+                addDrawChoicesToChoiceList(Moves.S);
                 break;
             case P:
-                for (int i = 0; i < winChancesModifier; i++) {
-                    choiceList.add(Moves.S);
-                }
-                for (int i = 0; i < loseChancesModifier; i++) {
-                    choiceList.add(Moves.R);
-                }
-                for (int i = 0; i < drawChancesModifier; i++) {
-                    choiceList.add(Moves.P);
-                }
+                addWinChoicesToChoiceList(Moves.S);
+                addLoseChoicesToChoiceLIst(Moves.R);
+                addDrawChoicesToChoiceList(Moves.P);
                 break;
+        }
+    }
+
+    private void addWinChoicesToChoiceList(Moves move) {
+        for (int i = 0; i < winChancesModifier; i++) {
+            choiceList.add(move);
+        }
+    }
+
+    private void addLoseChoicesToChoiceLIst(Moves move) {
+        for (int i = 0; i < loseChancesModifier; i++) {
+            choiceList.add(move);
+        }
+    }
+
+    private void addDrawChoicesToChoiceList(Moves move) {
+        for (int i = 0; i < drawChancesModifier; i++) {
+            choiceList.add(move);
         }
     }
 
@@ -64,62 +70,47 @@ public class CompPlayer {
         this.drawChancesModifier = 100;
     }
 
-    public void setWinChancesModifier(Scanner chanceModifierScanner) {
-        boolean isEntryCorrect = true;
-        while (isEntryCorrect) {
-            try {
-                System.out.println("Enter new value (1 - 100)");
-                final int newWinChancesValue = chanceModifierScanner.nextInt();
-                if (newWinChancesValue > 0 && newWinChancesValue <= 100) {
-                    System.out.println("Value correct, new value of " + newWinChancesValue + " chances to win has been set.\n");
-                    this.winChancesModifier = newWinChancesValue;
-                    isEntryCorrect = false;
-                } else {
-                    System.out.println("Value out of requested bounds. Try different value.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Wrong digit format, please try again.");
-                chanceModifierScanner.nextLine();
+    public void setWinChancesModifier(UserMoveReader userMoveReader) {
+        System.out.println("Enter new value (1 - 100)");
+        boolean isValueCorrect = true;
+        while (isValueCorrect) {
+            final int newWinChancesValue = userMoveReader.readNumber();
+            if (newWinChancesValue > 0 && newWinChancesValue <= 100) {
+                System.out.println("Value correct, new value of " + newWinChancesValue + " chances to win has been set.\n");
+                this.winChancesModifier = newWinChancesValue;
+                isValueCorrect = false;
+            } else {
+                System.out.println("Value out of requested bounds. Try different value.");
             }
         }
     }
 
-    public void setLoseChancesModifier(Scanner chanceModifierScanner) {
-        boolean isEntryCorrect = true;
-        while (isEntryCorrect) {
-            try {
-                System.out.println("Enter new value (1 - 100)");
-                final int newLoseChancesValue = chanceModifierScanner.nextInt();
-                if (newLoseChancesValue > 0 && newLoseChancesValue <= 100) {
-                    System.out.println("Value correct, new value of " + newLoseChancesValue + " chances to lose has been set.\n");
-                    this.loseChancesModifier = newLoseChancesValue;
-                    isEntryCorrect = false;
-                } else {
-                    System.out.println("Value out of requested bounds. Try different value.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Wrong digit format, please try again.");
-                chanceModifierScanner.nextLine();
+    public void setLoseChancesModifier(UserMoveReader userMoveReader) {
+        System.out.println("Enter new value (1 - 100)");
+        boolean isValueCorrect = true;
+        while (isValueCorrect) {
+            final int newLoseChancesValue = userMoveReader.readNumber();
+            if (newLoseChancesValue > 0 && newLoseChancesValue <= 100) {
+                System.out.println("Value correct, new value of " + newLoseChancesValue + " chances to lose has been set.\n");
+                this.loseChancesModifier = newLoseChancesValue;
+                isValueCorrect = false;
+            } else {
+                System.out.println("Value out of requested bounds. Try different value.");
             }
         }
     }
 
-    public void setDrawChancesModifier(Scanner chanceModifierScanner) {
-        boolean isEntryCorrect = true;
-        while (isEntryCorrect) {
-            try {
-                System.out.println("Enter new value (1 - 100)");
-                final int newDrawChancesValue = chanceModifierScanner.nextInt();
-                if (newDrawChancesValue > 0 && newDrawChancesValue <= 100) {
-                    System.out.println("Value correct, new value of " + newDrawChancesValue + " chances to draw has been set.\n");
-                    this.drawChancesModifier = newDrawChancesValue;
-                    isEntryCorrect = false;
-                } else {
-                    System.out.println("Value out of requested bounds. Try different value.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Wrong digit format, please try again.");
-                chanceModifierScanner.nextLine();
+    public void setDrawChancesModifier(UserMoveReader userMoveReader) {
+        System.out.println("Enter new value (1 - 100)");
+        boolean isValueCorrect = true;
+        while (isValueCorrect) {
+            final int newDrawChancesValue = userMoveReader.readNumber();
+            if (newDrawChancesValue > 0 && newDrawChancesValue <= 100) {
+                System.out.println("Value correct, new value of " + newDrawChancesValue + " chances to draw has been set.\n");
+                this.drawChancesModifier = newDrawChancesValue;
+                isValueCorrect = false;
+            } else {
+                System.out.println("Value out of requested bounds. Try different value.");
             }
         }
     }
@@ -132,32 +123,24 @@ public class CompPlayer {
                 "Draw chance: " + String.format("%.2f", drawChancesModifier / sum * 100) + "%\n");
     }
 
+    @Override
     public void addRoundPoint() {
         roundPoints++;
     }
 
+    @Override
     public void setRoundPoints(int roundPoints) {
         this.roundPoints = roundPoints;
     }
 
+    @Override
     public String getName() {
-        return "Computer";
+        return "computer";
     }
 
+    @Override
     public int getRoundPoints() {
         return roundPoints;
-    }
-
-    public int getWinChancesModifier() {
-        return winChancesModifier;
-    }
-
-    public int getLoseChancesModifier() {
-        return loseChancesModifier;
-    }
-
-    public int getDrawChancesModifier() {
-        return drawChancesModifier;
     }
 
     public List<Moves> getChoiceList() {

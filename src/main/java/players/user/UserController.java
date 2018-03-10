@@ -1,7 +1,6 @@
 package players.user;
 
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 public class UserController {
@@ -9,16 +8,16 @@ public class UserController {
     final private UserPlayer tempPlayer = new UserPlayer("tempName");
     private UserPlayer currentPlayer;
 
-    public UserController(UserPlayer currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    public UserController() {
+        this.currentPlayer = new UserPlayer("name");
     }
 
-    public void createFirstPlayer(Scanner firstPlayerNameScan) {
+    public void createFirstPlayer(UserMoveReader userMoveReader) {
         System.out.println("Enter your name:");
         boolean isCorrect = true;
-        String name = "";
+        String name = null;
         while (isCorrect) {
-            final String firstPlayerName = firstPlayerNameScan.nextLine();
+            final String firstPlayerName = userMoveReader.readMove();
             if (!firstPlayerName.trim().isEmpty() && !firstPlayerName.equals("1")) {
                 name = firstPlayerName;
                 isCorrect = false;
@@ -30,8 +29,8 @@ public class UserController {
         addPlayerToAllPlayersSet(currentPlayer);
     }
 
-    public void createNewPlayer(Scanner newPlayerNameScan) {
-        final String newPlayerName = newPlayerNameScan.nextLine();
+    public void createNewPlayer(UserMoveReader userMoveReader) {
+        final String newPlayerName = userMoveReader.readMove();
         tempPlayer.setName(newPlayerName);
         if (!newPlayerName.trim().isEmpty() && !newPlayerName.equals("1") && !playersSet.contains(tempPlayer)) {
             final UserPlayer newPlayer = new UserPlayer(newPlayerName);
@@ -43,12 +42,12 @@ public class UserController {
         }
     }
 
-    public void changeCurrentPlayer(Scanner existingPlayerNameScan) {
+    public void changeCurrentPlayer(UserMoveReader userMoveReader) {
         System.out.println("Please choose existing player by typing full name (uppercase matters !), \"ENTER\" to confirm.");
         allPlayersSetDisplay();
         System.out.println("\n[1] ~~ Abort");
 
-        final String playerToChangeName = existingPlayerNameScan.nextLine();
+        final String playerToChangeName = userMoveReader.readMove();
         switch (playerToChangeName) {
             case "1":
                 break;
@@ -63,7 +62,8 @@ public class UserController {
                             }
                         }
                     } else {
-                        System.out.println("Player " + playerToChangeName + " does not exist at database. Try again or create new player.\n");
+                        System.out.println("Player " + playerToChangeName +
+                                " does not exist at database. Try again or create new player.\n");
                     }
                 }
                 break;
@@ -80,8 +80,21 @@ public class UserController {
         }
     }
 
-    public void addPlayerToAllPlayersSet(UserPlayer player) {
+    public void addOneWinPointToStats() {
+        currentPlayer.incWonGames();
+    }
+
+    public void addOneLostPointToStats() {
+        currentPlayer.incLostGames();
+    }
+
+    private void addPlayerToAllPlayersSet(UserPlayer player) {
         playersSet.add(player);
+    }
+
+    public void getCurrentPlayerStats() {
+        System.out.println("Player ~~ " + currentPlayer.getName() + " ~~");
+        System.out.println("Won: " + currentPlayer.getWonGames() + " : " + currentPlayer.getLostGames() + " Lost\n");
     }
 
     public Set<UserPlayer> getPlayersSet() {
@@ -95,19 +108,4 @@ public class UserController {
     private void setCurrentPlayer(UserPlayer newPlayer) {
         this.currentPlayer = newPlayer;
     }
-
-    public void getCurrentPlayerStats() {
-        System.out.println("Player ~~ " + currentPlayer.getName() + " ~~");
-        System.out.println("Won: " + currentPlayer.getWonGames() + " : " + currentPlayer.getLostGames() + " Lost\n");
-    }
-
-    public void addOneWinPointToStats() {
-        currentPlayer.incWonGames();
-    }
-
-    public void addOneLostPointToStats() {
-        currentPlayer.incLostGames();
-    }
 }
-
-
