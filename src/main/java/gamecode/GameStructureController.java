@@ -4,13 +4,13 @@ import players.computer.CompPlayer;
 import players.user.UserController;
 import players.user.UserMoveReader;
 
-public class GameStructureController {
+public final class GameStructureController {
     private final UserMoveReader userMoveReader;
     private final CompPlayer compPlayer;
     private final UserController userController;
     private final NewGameController logicController;
 
-    public GameStructureController(CompPlayer compPlayer, UserController userController, NewGameController logicController, UserMoveReader userMoveReader) {
+    public GameStructureController(final CompPlayer compPlayer, final UserController userController, final NewGameController logicController, final UserMoveReader userMoveReader) {
         this.compPlayer = compPlayer;
         this.userController = userController;
         this.logicController = logicController;

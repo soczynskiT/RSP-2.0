@@ -1,6 +1,7 @@
 
 import enums.Moves;
 import gamecode.NewGameController;
+import gamecode.RoundMove;
 import gamecode.SingleRoundController;
 import org.junit.*;
 
@@ -8,6 +9,8 @@ import players.computer.CompPlayer;
 import players.user.UserController;
 import players.user.UserMoveReader;
 import players.user.UserPlayer;
+
+import java.util.HashSet;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,28 +48,28 @@ public class RSPTestSuite {
     @Test
     public void testSetComputerChances() {
         //Given
-        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(1);
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(4);
         compPlayer.setWinChancesModifier(USER_MOVE_READER_MOCK);
-        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(2);
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(4);
         compPlayer.setLoseChancesModifier(USER_MOVE_READER_MOCK);
-        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(3);
+        when(USER_MOVE_READER_MOCK.readNumber()).thenReturn(2);
         compPlayer.setDrawChancesModifier(USER_MOVE_READER_MOCK);
         int win = 0;
         int lose = 0;
         int draw = 0;
         //When
-        compPlayer.setComputerChances(Moves.P);
+        compPlayer.setComputerChances(Moves.R);
         for (Moves move : compPlayer.getChoiceList()) {
-            if (move.equals(Moves.S)) {
+            if (move.equals(Moves.SP)|| move.equals(Moves.P)) {
                 win++;
-            } else if (move.equals(Moves.R)) {
+            } else if (move.equals(Moves.S)||move.equals(Moves.L)) {
                 lose++;
             } else {
                 draw++;
             }
         }
         //Then
-        Assert.assertTrue(win == 1 && lose == 2 && draw == 3);
+        Assert.assertTrue(win == 4 && lose == 4 && draw == 2);
     }
 
     /* Test of UserPlayer class. */
@@ -101,6 +104,28 @@ public class RSPTestSuite {
         final Moves playerMove = userPlayer.makeMove(USER_MOVE_READER_MOCK);
         //Then
         Assert.assertEquals(Moves.S, playerMove);
+    }
+
+    @Test
+    public void testMakeMoveSpock() {
+        //Given
+        final UserPlayer userPlayer = new UserPlayer("name");
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("k");
+        //When
+        final Moves playerMove = userPlayer.makeMove(USER_MOVE_READER_MOCK);
+        //Then
+        Assert.assertEquals(Moves.SP, playerMove);
+    }
+
+    @Test
+    public void testMakeMoveLizard() {
+        //Given
+        final UserPlayer userPlayer = new UserPlayer("name");
+        when(USER_MOVE_READER_MOCK.readMove()).thenReturn("l");
+        //When
+        final Moves playerMove = userPlayer.makeMove(USER_MOVE_READER_MOCK);
+        //Then
+        Assert.assertEquals(Moves.L, playerMove);
     }
 
     /* Test of UserController class. */
@@ -157,6 +182,21 @@ public class RSPTestSuite {
         //Then
         Assert.assertFalse(player2.equals(userController.getCurrentPlayer()));
         Assert.assertFalse(userController.getPlayersSet().contains(player2));
+    }
+
+    /* Test of RoundMove class */
+    @Test
+    public void testRoundMoveClass() {
+        //Given
+        final Moves move1 = Moves.L;
+        final Moves move2 = Moves.S;
+        //When
+        final RoundMove roundMove = new RoundMove(move1, move2);
+        final HashSet<Moves> expectedHashSet = new HashSet<>();
+        expectedHashSet.add(move1);
+        expectedHashSet.add(move2);
+        //Then
+        Assert.assertEquals(expectedHashSet, roundMove.getRoundMove());
     }
 
     /* Test of SingleRoundController class */

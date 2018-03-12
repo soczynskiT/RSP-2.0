@@ -19,27 +19,36 @@ public class UserPlayer implements Player {
         System.out.println("[R] ~~ " + Moves.R.getName());
         System.out.println("[P] ~~ " + Moves.P.getName());
         System.out.println("[S] ~~ " + Moves.S.getName());
-
+        System.out.println("[L] ~~ " + Moves.L.getName());
+        System.out.println("[K] ~~ " + Moves.SP.getName());
         return getPlayerMove(userMoveReader);
     }
 
     private Moves getPlayerMove(UserMoveReader userMoveReader) {
-        boolean isMoveCorrect = true;
+        boolean isMoveCorrect = false;
         Moves result = null;
-        while (isMoveCorrect) {
+        while (!isMoveCorrect) {
             final String moveChoice = userMoveReader.readMove().toUpperCase();
             switch (moveChoice) {
                 case "R":
                     result = Moves.R;
-                    isMoveCorrect = false;
+                    isMoveCorrect = true;
                     break;
                 case "P":
                     result = Moves.P;
-                    isMoveCorrect = false;
+                    isMoveCorrect = true;
                     break;
                 case "S":
                     result = Moves.S;
-                    isMoveCorrect = false;
+                    isMoveCorrect = true;
+                    break;
+                case "L":
+                    result = Moves.L;
+                    isMoveCorrect = true;
+                    break;
+                case "K":
+                    result = Moves.SP;
+                    isMoveCorrect = true;
                     break;
                 default:
                     System.out.println("Wrong choice, try again");

@@ -3,7 +3,9 @@ package enums;
 public enum Moves {
     R("Rock"),
     S("Scissors"),
-    P("Paper");
+    P("Paper"),
+    L("Lizard"),
+    SP("Spock");
 
     private String name;
 

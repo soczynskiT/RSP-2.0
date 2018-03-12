@@ -24,38 +24,41 @@ public class CompPlayer implements Player {
         choiceList.clear();
         switch (playerMove) {
             case R:
-                addWinChoicesToChoiceList(Moves.P);
-                addLoseChoicesToChoiceLIst(Moves.S);
-                addDrawChoicesToChoiceList(Moves.R);
+                addChoicesToChoiceList(Moves.P, Moves.SP, winChancesModifier);
+                addChoicesToChoiceList(Moves.S, Moves.L, loseChancesModifier);
+                addChoicesToChoiceList(Moves.R, Moves.R, drawChancesModifier);
                 break;
             case S:
-                addWinChoicesToChoiceList(Moves.R);
-                addLoseChoicesToChoiceLIst(Moves.P);
-                addDrawChoicesToChoiceList(Moves.S);
+                addChoicesToChoiceList(Moves.R, Moves.SP, winChancesModifier);
+                addChoicesToChoiceList(Moves.P, Moves.L, loseChancesModifier);
+                addChoicesToChoiceList(Moves.S, Moves.S, drawChancesModifier);
                 break;
             case P:
-                addWinChoicesToChoiceList(Moves.S);
-                addLoseChoicesToChoiceLIst(Moves.R);
-                addDrawChoicesToChoiceList(Moves.P);
+                addChoicesToChoiceList(Moves.S, Moves.L, winChancesModifier);
+                addChoicesToChoiceList(Moves.R, Moves.SP, loseChancesModifier);
+                addChoicesToChoiceList(Moves.P, Moves.P, drawChancesModifier);
+                break;
+            case L:
+                addChoicesToChoiceList(Moves.S, Moves.R, winChancesModifier);
+                addChoicesToChoiceList(Moves.P, Moves.SP, loseChancesModifier);
+                addChoicesToChoiceList(Moves.L, Moves.L, drawChancesModifier);
+                break;
+            case SP:
+                addChoicesToChoiceList(Moves.P, Moves.L, winChancesModifier);
+                addChoicesToChoiceList(Moves.R, Moves.S, loseChancesModifier);
+                addChoicesToChoiceList(Moves.SP, Moves.SP, drawChancesModifier);
                 break;
         }
     }
 
-    private void addWinChoicesToChoiceList(Moves move) {
-        for (int i = 0; i < winChancesModifier; i++) {
-            choiceList.add(move);
-        }
-    }
-
-    private void addLoseChoicesToChoiceLIst(Moves move) {
-        for (int i = 0; i < loseChancesModifier; i++) {
-            choiceList.add(move);
-        }
-    }
-
-    private void addDrawChoicesToChoiceList(Moves move) {
-        for (int i = 0; i < drawChancesModifier; i++) {
-            choiceList.add(move);
+    private void addChoicesToChoiceList(Moves move, Moves move2, int modifier) {
+        for (int i = 0; i < modifier; i++) {
+            final int modulo = i % 2;
+            if (modulo != 0) {
+                choiceList.add(move);
+            } else {
+                choiceList.add(move2);
+            }
         }
     }
 
